@@ -2,9 +2,11 @@ import React from 'react';
 
 import NavBar from './Nav';
 import BookingForm from './BookingForm';
+import Axios from 'axios';
 import VehicleCard from './VechicleCard';
 
 class ResultPage extends React.Component{
+  
   constructor(props){
     super(props);
     this.state={
@@ -12,19 +14,32 @@ class ResultPage extends React.Component{
       pickUpDate:'',
       dropOffDate:'',
     }
+    
   }
 
-  handleParentData = (formModel) => {
-    this.setState({...formModel});
-  }
+ 
+
+  // handleParentData = (formModel) => {
+  //   this.setState({...formModel});
+  // }
 
   componentDidMount(){
-    fetch('http://localhost:8081/api/get')
-    .then(res=>res.json())
-    .then((data)=>{
-        this.setState({vehicles : data})
-        
-    }).catch(console.log) 
+    const localStorageData = JSON.parse(localStorage.getItem("formdata"));
+    console.log(localStorageData);
+    var self= this;
+    Axios.get('http://localhost:8081/api/getAvailableVehicles', {
+      params: {
+        pickUpDate:localStorageData['pickUpDate'],
+        dropOffDate:localStorageData['dropOffDate']
+      }
+    })
+    .then(function (response) {
+     self.setState({vehicles: response.data})
+     console.log(response.data);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
 }
 
 render(){ 
@@ -78,16 +93,15 @@ var FilterOptions = createReactClass({
   },
   render:function(){
     return(
-      <div>
-         <BookingForm handleData={this.handleParentData}/>
-         <p>{this.state.pickUpDate}</p>
-      </div>
+      // <div>
+      //    <p>{this.state.pickUpDate}</p>
+      // </div>
       
-      // <select id="filterDropdrown" value={this.state.vehicle_TYPE} onChange={this.handleChange}>
-      //   <option value=" "></option>
-      //   <option value="Car">Car</option>
-      //   <option value="MotorBike">MotorBike</option>
-      // </select>
+      <select id="filterDropdrown" value={this.state.vehicle_TYPE} onChange={this.handleChange}>
+        <option value=" "></option>
+        <option value="Car">Car</option>
+        <option value="MotorBike">MotorBike</option>
+      </select>
     );
   }
 });

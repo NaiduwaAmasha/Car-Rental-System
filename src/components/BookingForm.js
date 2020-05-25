@@ -33,21 +33,50 @@ class BookingForm extends React.Component {
     });
   }
   handleSubmit(event) {
+    
     event.preventDefault();
-
     console.log(this.state.pickUpDate + "/" + this.state.dropOffDate+"/"+this.state.pickUpLocation+"/"+this.state.returnLocation);
-    Axios.post('http://localhost:8081/api/addSchedule',{
-        pickUpDate:this.state.pickUpDate,
-        dropOffDate:this.state.dropOffDate,
-        pickUpLocation:this.state.pickUpLocation,
-        returnLocation:this.state.returnLocation
-    })
-    .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+
+    var scheduleFormData = {
+      pickUpDate : this.state.pickUpDate,
+      dropOffDate:this.state.dropOffDate,
+      pickUpLocation:this.state.pickUpLocation,
+      returnLocation :this.state.returnLocation
+    }
+    localStorage.setItem('formdata',JSON.stringify(scheduleFormData));
+    var test = JSON.parse(localStorage.getItem("formdata"));
+    console.log(test);
+    // Axios.get('http://localhost:8081/api/getSchedules', {
+    //   params: {
+    //     pickUpDate:this.state.pickUpDate,
+    //     dropOffDate:this.dropOffDate
+    //   }
+    // })
+    // .then(function (response) {
+    //   console.log(response);
+    // })
+    // .catch(function (error) {
+    //   console.log(error);
+    // });
+    // var scheduleFormData = new FormData();
+    // scheduleFormData.append('pickUpDate',this.state.pickUpDate);
+    // scheduleFormData.append('dropOffDate',this.state.dropOffDate);
+    // scheduleFormData.append('pickUpLocation',this.state.pickUpLocation);
+    // scheduleFormData.append('returnLocation',this.state.returnLocation);
+
+   
+    // Axios.post('http://localhost:8081/api/addSchedule',scheduleFormData,{
+    //   headers:{
+    //     'Content-Type':  'application/json',
+    //   "Access-Control-Allow-Origin": "*",
+    //   }
+    // })
+    // .then(function (response) {
+    //     console.log(response);
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //   });
 
   }
 
@@ -93,7 +122,7 @@ class BookingForm extends React.Component {
              </select>
             </label>
 
-            <input type="submit" value="Find" onClick={this.onSubmit} />
+            <Link to="/results"><input type="submit" value="Find" onClick={this.onSubmit} /></Link>
           </form>
         </div>
       </div>
