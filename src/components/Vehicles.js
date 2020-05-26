@@ -1,5 +1,9 @@
 import React from 'react';
 import NavBar from './Nav';
+import CarCard from './CarCard';
+import MotorBikeCard from './MotorBikeCard';
+
+import Container from 'react-bootstrap/Container';
 
 class Vehicles extends React.Component{
     constructor(props){
@@ -13,46 +17,59 @@ class Vehicles extends React.Component{
         .then(res=>res.json())
         .then((data)=>{
             this.setState({vehicles : data})
+            console.log(data)
         }).catch(console.log) 
     }
       render(){ 
         return(
-          <div>
-              <NavBar/>,
+          <Container>
                 <VehicleItem vehicles={this.state.vehicles}/>
-          </div>
+          </Container>
      
         );
       
       }
 
 }
+//Items are displayed in a two column grid
+const Items = ({data}) => {
+  const rows = [...Array(Math.ceil(data.length / 3))];
+  const itemRows = rows.map((row, i) => data.slice(i * 3, i * 3 + 3));
+  const content = itemRows.map((row, i) => (
+    <div className="row" key={i}>
+      {row.map((item) => {
+        const Type = (item.vehicle_TYPE==='Car'? CarCard : MotorBikeCard);
+        console.log(Type);
+        return(
+        <div
+        className="col mx-lg-2 mx-md-0 mx-sm-0"
+          key={item.plateNum}
+        >
+          
+         
+             
+            
+            
+             
+           
+            <Type data={item}/>
+         
+          
+        </div>
+           );
+})}
+    </div>
+  ));
+  return <div>{content}</div>;
+};
 const VehicleItem = ({vehicles})=>{
     return(
-        <div>
+        <Container fluid>
             <h1><center>VEHICLE LIST</center></h1>
-            {vehicles.map((item)=>{
-            return(
-              <div className="card">
-                            <div className="card-body" >
-                                 <label >Vehicle Type:{item.vehicle_TYPE} </label> 
-                                 <label>Make:{item.make} </label>
-                                 <label>Model:{item.model} </label>
-                                <label>Number Of Seats:{item.numOfSeats} </label>
-                                <label>Rate:{item.priceRate} </label>
-                                <label >Plate Number:{item.plateNum} </label>
-                                <label>A/C Availability:{item.acAvailability} </label>
-                                <label >Color:{item.color} </label>
-                                <label>Number of Doors:{item.numOfDoors} </label>
-                                <label >Transmission:{item.transmission} </label>
-                                <label >TankCapacity:{item.tankCapacity} </label>
-                                <label>Luggage Weight:{item.luggageWeight} </label>
-                                <label >Number of seats:{item.numOfSeats} </label>
-                             </div>
-                        </div>
-            );
-        })}
-        </div>
+            <Items data={vehicles}/>
+            
+       
+        </Container>
     );
 
 }

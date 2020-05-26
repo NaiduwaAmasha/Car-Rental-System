@@ -1,128 +1,119 @@
-import React from 'react';
+import React from "react";
+import NavBar from "./Nav";
+import Axios from "axios";
+import VehicleCard from "./VechicleCard";
 
-import NavBar from './Nav';
-import BookingForm from './BookingForm';
-import Axios from 'axios';
-import VehicleCard from './VechicleCard';
-
-class ResultPage extends React.Component{
-  
-  constructor(props){
+class ResultPage extends React.Component {
+  constructor(props) {
     super(props);
-    this.state={
-      vehicles:'',
-      pickUpDate:'',
-      dropOffDate:'',
-    }
-    
+    this.state = {
+      vehicles: "",
+      pickUpDate: "",
+      dropOffDate: "",
+    };
   }
 
- 
-
-  // handleParentData = (formModel) => {
-  //   this.setState({...formModel});
-  // }
-
-  componentDidMount(){
+  componentDidMount() {
     const localStorageData = JSON.parse(localStorage.getItem("formdata"));
     console.log(localStorageData);
-    var self= this;
-    Axios.get('http://localhost:8081/api/getAvailableVehicles', {
+    var self = this;
+    Axios.get("http://localhost:8081/api/getAvailableVehicles", {
       params: {
-        pickUpDate:localStorageData['pickUpDate'],
-        dropOffDate:localStorageData['dropOffDate']
-      }
+        pickUpDate: localStorageData["pickUpDate"],
+        dropOffDate: localStorageData["dropOffDate"],
+      },
     })
-    .then(function (response) {
-     self.setState({vehicles: response.data})
-     console.log(response.data);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-}
+      .then(function (response) {
+        self.setState({ vehicles: response.data });
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
 
-render(){ 
-    
-    var filterData=this.state.vehicles;
-    return(
+  render() {
+    var filterData = this.state.vehicles;
+    return (
       <div>
-          <NavBar/>,
-       <FilterForm data={filterData}/>  
+        <NavBar />,
+        <FilterForm data={filterData} />
       </div>
     );
-  } 
+  }
 }
-var createReactClass = require('create-react-class');
+var createReactClass = require("create-react-class");
 var FilterForm = createReactClass({
-  getInitialState:function(){
-    return{
-      data:[],
-      vehicle_TYPE:''
-    }
+  getInitialState: function () {
+    return {
+      data: [],
+      vehicle_TYPE: "",
+    };
   },
-  handleChange:function(val){
-    this.setState({vehicle_TYPE:val});
-    var filteredData = this.props.data.filter(function(item){
+  handleChange: function (val) {
+    this.setState({ vehicle_TYPE: val });
+    var filteredData = this.props.data.filter(function (item) {
       return item.vehicle_TYPE === val;
     });
-    this.setState({data:filteredData});
-    console.log(filteredData,val);
+    this.setState({ data: filteredData });
+    console.log(filteredData, val);
   },
-  render:function(){
-    return(
+  render: function () {
+    return (
       <div>
         <h2>Vehicle Type</h2>
-      <FilterOptions data={this.state.data} changeOption={this.handleChange}/>
-      <FilterItems data ={this.state.data}/>
-    </div>
+        <FilterOptions
+          data={this.state.data}
+          changeOption={this.handleChange}
+        />
+        <FilterItems data={this.state.data} />
+      </div>
     );
-  }
+  },
 });
 var FilterOptions = createReactClass({
-  getInitialState:function(){
-    return{
-      data:this.props.data,
-      vehicle_TYPE:''
-    }
+  getInitialState: function () {
+    return {
+      data: this.props.data,
+      vehicle_TYPE: "",
+    };
   },
-  handleChange:function(e){
-    var val= e.target.value;
-    this.setState({vehicle_TYPE:val});
+  handleChange: function (e) {
+    var val = e.target.value;
+    this.setState({ vehicle_TYPE: val });
     this.props.changeOption(val);
   },
-  render:function(){
-    return(
+  render: function () {
+    return (
       // <div>
       //    <p>{this.state.pickUpDate}</p>
       // </div>
-      
-      <select id="filterDropdrown" value={this.state.vehicle_TYPE} onChange={this.handleChange}>
+
+      <select
+        id="filterDropdrown"
+        value={this.state.vehicle_TYPE}
+        onChange={this.handleChange}
+      >
         <option value=" "></option>
         <option value="Car">Car</option>
         <option value="MotorBike">MotorBike</option>
       </select>
     );
-  }
+  },
 });
 var FilterItems = createReactClass({
-  render:function(){
-    return(
-     
-
+  render: function () {
+    return (
       <div>
-        
-        {this.props.data.map((item)=>
+        {this.props.data.map((item) => (
           <li key={item.plateNum}>
-            <VehicleCard vehicle_TYPE={item.vehicle_TYPE} make={item.make} model={item.model} numOfSeats={item.numOfSeats}
-          priceRate={item.priceRate} plateNum={item.plateNum} acAvailability={item.acAvailability} numOfDoors={item.numOfDoors} 
-          color={item.color} transmission={item.transmission} tankCapacity={item.tankCapacity} luggageWeight={item.luggageWeight}
-        />
+            <VehicleCard
+              data={item}
+            />
           </li>
-          
-        )}
+        ))}
       </div>
-    )
-  }
+    );
+  },
 });
 export default ResultPage;
