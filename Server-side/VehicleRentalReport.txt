@@ -1,0 +1,25 @@
+Car[Vehicle[ PlateNum :spkp0640 ,Make : toyota ,Model : aqua ,Num Of Seats : 4 , Availability : true ,PriceRate : 4000.00 ,Transmission : auto]
+	A/C available : true
+	Color : red
+	Num of Doors : 4
+]
+Motor Bike[Vehicle[ PlateNum :spkp3535 ,Make : honda ,Model : activa ,Num Of Seats : 2 , Availability : true ,PriceRate : 4000.00 ,Transmission : auto]
+	Seat Height : 156.0
+	Tank Capacity : 5300
+	Luggage Weight :3.0
+]
+Car[Vehicle[ PlateNum :dsf ,Make : sdf ,Model : sdf ,Num Of Seats : 3 , Availability : true ,PriceRate : 3 ,Transmission : auto]
+	A/C available : true
+	Color : e
+	Num of Doors : 3
+]
+Car[Vehicle[ PlateNum :sf ,Make : sdf ,Model : ss ,Num Of Seats : 4 , Availability : true ,PriceRate : 4 ,Transmission : auto]
+	A/C available : true
+	Color : e
+	Num of Doors : 4
+]
+Car[Vehicle[ PlateNum :WPAGG4532 ,Make : toyota ,Model : Wigo ,Num Of Seats : 4 , Availability : true ,PriceRate : 6000 ,Transmission : auto]
+	A/C available : true
+	Color : red
+	Num of Doors : 4
+]
